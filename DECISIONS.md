@@ -70,14 +70,15 @@ word it, is your call.
 ## 3. Promises on the privacy page that the pipeline must keep
 
 The policies require these statements, so the privacy page makes them, and they have to be true in
-practice. What the builder found in the repository (read only, nothing changed):
+practice. What the builder found in the repository (read only, nothing changed), with the
+Manager's fixes of 2026-09-16 noted:
 
 | The privacy page says | Policy section | Found |
 |---|---|---|
-| After access is revoked on Google's page, data stored under that permission is deleted within 30 days | Developer Policies III.D.2.c.ii | Nothing does this automatically: a manual step for you |
+| After access is revoked on Google's page, data stored under that permission is deleted within 30 days | Developer Policies III.D.2.c.ii | Still a manual step: no `mm` command deletes the stored metrics rows (the table is append-only), and a purge step is owed in the pipeline. Since 2026-09-16 a revoked grant makes the pipeline's weekly authorisation check fail, and the daily loop's owner queue raises it before 30 days have passed since the last successful check |
 | A deletion request is honoured within 7 days, and deleting the app's copy does not touch YouTube | III.E.4.g | Manual, as the page says |
-| Access is revoked on Google's permissions page | III.A.2.h, III.D.2.c | `mm analytics auth --revoke` deletes only the local token and, by its own docstring, leaves the grant on Google's side. III.D.2.c.i says an app's own revoke mechanism must also revoke the token with Google straight away, so the page names Google's page, not the command |
-| The token is kept only while needed; channel data only as long as needed | III.E.4.a, III.E.4.b | Not checked. III.E.4.b also requires confirming at least every 30 days that stored analytics are still authorised; not checked either |
+| Access is revoked on Google's permissions page | III.A.2.h, III.D.2.c | Found: `mm analytics auth --revoke` deleted only the local token. **Fixed 2026-09-16:** it now revokes the grant with Google, then deletes the local token, and says that a revocation through it starts a 7-day deletion duty (III.D.2.c.i: 7 calendar days after a revocation through the app, 30 after one on Google's page). The page can go on naming Google's page |
+| The token is kept only while needed; channel data only as long as needed | III.E.4.a, III.E.4.b | How long data is needed is a judgement nobody has written down yet. **The 30-day confirmation is built (2026-09-16):** the pipeline confirms weekly that the sign-in still reaches the channel and records it, and the owner queue names the deadline if confirmations lapse |
 | The Limited Use statement | User Data Policy, "Limited Use" | A commitment; depends on section 2 |
 | Both pages are updated before the app requests any new permission, such as `youtube.upload` | III.E.3.c; User Data Policy | Stated on both pages |
 
