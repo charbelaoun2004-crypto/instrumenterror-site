@@ -32,7 +32,7 @@
       <ul>
         <li>This website sets no cookies and has no analytics, trackers, forms or external scripts.</li>
         <li>The Instrument Error app uses YouTube API Services. It is a private tool, used only by us, for our own YouTube channel.</li>
-        <li>It reads the channel's video details, public statistics and YouTube Analytics reports. It collects no data about viewers or any other Google user.</li>
+        <li>It reads the channel's video details, public statistics and YouTube Analytics reports, and it uploads our own finished videos to our own channel. It collects no data about viewers or any other Google user.</li>
         <li>Nothing is sold or used for advertising. An AI assistant service we use to run the channel may process the channel figures; see section 7.</li>
         <li>Access can be revoked at any time in Google Account permissions.</li>
       </ul>
@@ -81,14 +81,16 @@
     <p>For example, there is no sign-up screen. The app's only user is us, and this policy is published at a fixed address that is linked from every page of this website.</p>
 
     <h2 id="access">4. What the app accesses</h2>
-    <p>The app holds two read-only permissions (OAuth scopes) and uses them for our own channel only:</p>
+    <p>The app holds three permissions (OAuth scopes) and uses them for our own channel only. Two only read; one uploads:</p>
     <dl class="scopes">
       <dt><code>https://www.googleapis.com/auth/youtube.readonly</code></dt>
       <dd>Reads the channel's video details and public statistics: view, like and comment counts.</dd>
       <dt><code>https://www.googleapis.com/auth/yt-analytics.readonly</code></dt>
       <dd>Reads YouTube Analytics reports for the channel, for example engaged views, average percentage viewed and subscribers gained.</dd>
+      <dt><code>https://www.googleapis.com/auth/youtube.upload</code></dt>
+      <dd>Uploads the channel's own finished videos to the channel, each with its title, description, captions and the time it should go public. The app uses this permission for nothing else: it does not edit or delete videos that are already on the channel, and it does not touch comments, playlists or channel settings.</dd>
     </dl>
-    <p>The app collects no data about viewers or about any other Google user. It does not hold the upload permission (<code>youtube.upload</code>) or any other permission that could change anything on YouTube.</p>
+    <p>The app collects no data about viewers or about any other Google user. Apart from uploading our own videos to our own channel, it holds no permission that could change anything on YouTube.</p>
 
     <h2 id="use">5. How the data is used</h2>
     <p>The app uses what it reads for one purpose: to judge which of the channel's videos work. The data is not used for advertising or for any other purpose.</p>
