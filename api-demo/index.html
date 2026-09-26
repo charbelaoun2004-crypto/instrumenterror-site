@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Instrument Error: YouTube Data API upload demonstration</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0B0D10">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  video { width: 100%; max-width: 960px; border-radius: 8px; background: #000; }
+  ol li { margin-bottom: .6em; }
+  code { font-family: Consolas, monospace; font-size: .95em; }
+  table { border-collapse: collapse; margin: .6em 0 1em; }
+  td { padding: .2em 1em .2em 0; vertical-align: top; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="wordmark" href="../">Instrument Error</a>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+    <section aria-labelledby="page-title">
+      <p class="label">For the YouTube API Services review</p>
+      <span class="rule" aria-hidden="true"></span>
+      <h1 id="page-title">How the Instrument Error API client uploads a video</h1>
+      <p class="lede">A screen recording, made on 26 September 2026, of the API client uploading a video to the
+        Instrument Error channel with the YouTube Data API v3, reading it back, and the end result in YouTube Studio.
+        English throughout; nothing is translated or edited out.</p>
+
+      <video controls preload="metadata" src="instrument_error_api_upload_demo.mp4"></video>
+      <p><a href="instrument_error_api_upload_demo.mp4" download>Download the screencast (MP4, 72 seconds, 1 MB)</a></p>
+
+      <h2>The API client</h2>
+      <table>
+        <tr><td>Channel</td><td>Instrument Error, youtube.com/@instrumenterror, channel id UCPGHX0P74zWrb3nXNOTDNOw</td></tr>
+        <tr><td>Google Cloud project</td><td>instrument-error, project number 316143602607</td></tr>
+        <tr><td>User</td><td>The channel owner only. The client is a command-line tool that runs on the owner's own computer and works only with this channel.</td></tr>
+        <tr><td>OAuth scopes</td><td>youtube.upload, youtube.readonly, yt-analytics.readonly</td></tr>
+        <tr><td>Privacy policy</td><td><a href="../privacy/">instrumenterror.com/privacy/</a></td></tr>
+      </table>
+
+      <h2>What the screencast shows, step by step</h2>
+      <ol>
+        <li><strong>Authorisation.</strong> <code>mm analytics auth --check</code> shows the stored OAuth 2.0 grant the
+          channel owner gave on Google's consent screen: authorised, refresh token stored, OAuth app status
+          production, and the three scopes above. The token itself is stored encrypted (Windows DPAPI) and never shown.</li>
+        <li><strong>The video.</strong> An original Short made for the channel (MM-0004 version 9, "The students who ran
+          past a staged fight without noticing it"): its script is fact-checked against cited peer-reviewed sources, it
+          is rendered to a 1080x1920 H.264/AAC file, and its approval is bound to the file's SHA-256, so only the
+          approved file can be uploaded.</li>
+        <li><strong>Upload.</strong> <code>mm publish demo-upload --video MM-0004 --version 9</code> calls
+          <code>videos.insert</code> with <code>part=snippet,status</code> and a resumable media upload. The request sets
+          the title, the description (with the sources and the AI disclosure sentence), category 22, language en,
+          <code>privacyStatus: private</code>, <code>selfDeclaredMadeForKids: false</code> and
+          <code>containsSyntheticMedia: true</code>, with no subscriber notification. YouTube answers with the new
+          video id (Z3PIlbMxCIw).</li>
+        <li><strong>Read-back.</strong> The client calls <code>videos.list</code> with <code>part=snippet,status</code> for
+          that id and compares what YouTube holds with what was sent: title, channel, privacy status, upload status and
+          made-for-kids all match.</li>
+        <li><strong>End result.</strong> The same video in YouTube Studio: on the Instrument Error channel, private,
+          with the title and description the client sent.</li>
+      </ol>
+
+      <h2>How it runs in normal operation</h2>
+      <p>Each finished and approved Short is uploaded exactly as above, except that <code>status.publishAt</code> is
+        set to the next free posting slot (08:00, 14:00 or 20:00 Sydney time, at most three a day), so YouTube itself
+        publishes it at that time. Every upload is made once per approved file (an idempotency token prevents a second
+        upload of the same file), and every upload is read back with <code>videos.list</code>. Expected usage is about
+        4,800 quota units a day for three uploads plus a few hundred units of read-backs, within the default quota.</p>
+      <p>The upload above was made for this demonstration and has the prefix "[API DEMO]" in its title; it stays
+        private.</p>
+    </section>
+  </div>
+</main>
+</body>
+</html>
